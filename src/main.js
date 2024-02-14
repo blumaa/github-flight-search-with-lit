@@ -18,12 +18,12 @@ export class GithubRepoSearch extends LitElement {
   #router = new Router(this, [
     {
       path: "/",
-      render: () =>
-        html`<search-repo
-            @add-search-term=${this.onAddSearchTerm}
-          ></search-repo>
-          ${this.isLoading ? "finding repos" : null}
-          <search-results .repos=${this.repoData}></search-results> `,
+      render: () => html`
+        <search-repo @add-search-term=${this.onAddSearchTerm}></search-repo>
+        <!-- How do I set search-results component to render when this.isLoading is false? -->
+        ${this.isLoading ? "finding repos" : null}
+        <search-results .repos=${this.repoData}></search-results>
+      `,
     },
     {
       path: "/repo-details/:id",
@@ -50,6 +50,10 @@ export class GithubRepoSearch extends LitElement {
     return html`<div>${this.#router.outlet()}</div>`;
   }
 
+  stateChanged(state) {
+    this.repoData = state.data.repos;
+  }
+
   onAddSearchTerm(event) {
     this.repoData = [];
     this.isLoading = true;
@@ -70,4 +74,3 @@ const fetchGitHubRepos = async (repoName) => {
 };
 
 customElements.define("github-repo-search", GithubRepoSearch);
-
