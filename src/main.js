@@ -4,6 +4,9 @@ import "./RepoDetails";
 import "./SearchRepo";
 import "./SearchResults";
 import "./RepoCard";
+import { connect } from "pwa-helpers";
+import { store } from "./store";
+import { fetchRepos, isLoading } from "./actions";
 
 /**
  * This is the root.
@@ -14,7 +17,7 @@ import "./RepoCard";
  * Takes care of routing and state
  * ```
  */
-export class GithubRepoSearch extends LitElement {
+export class GithubRepoSearch extends connect(store)(LitElement) {
   #router = new Router(this, [
     {
       path: "/",
@@ -40,7 +43,6 @@ export class GithubRepoSearch extends LitElement {
 
   constructor() {
     super();
-    this.isLoading = false;
     //   this.addEventListener("keydown", (e) =>
     //     console.log(e.type, e.target.localName),
     //   );
@@ -51,17 +53,20 @@ export class GithubRepoSearch extends LitElement {
   }
 
   stateChanged(state) {
-    this.repoData = state.data.repos;
+    console.log("isLoading", state.isLoading);
+    this.repoData = state.repoData;
+    this.isLoading = state.isLoading;
   }
 
   onAddSearchTerm(event) {
-    this.repoData = [];
-    this.isLoading = true;
+    store.dispatch(fetchRepos([]));
+    store.dispatch(isLoading(true));
     fetchGitHubRepos(event.detail)
       .then((data) => {
-        this.repoData = data.items;
+        // this.repoData = data.items;
+        store.dispatch(fetchRepos(data.items));
       })
-      .finally(() => (this.isLoading = false));
+      .finally(() => store.dispatch(isLoading(false)));
   }
 }
 

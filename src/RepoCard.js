@@ -40,26 +40,24 @@ export class RepoCard extends LitElement {
       flex-direction: column;
       border-radius: 5px;
       cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    :host(:hover) {
+      transform-origin: center;
+      text-decoration: none;
+      cursor: pointer;
+      transform: scale(1.03);
     }
     img {
       width: 40px;
       height: 40px;
     }
     a {
-      text-decoration: none; /* Remove underline */
-      color: inherit; /* Inherit text color from parent */
-      cursor: default; /* Optionally, remove pointer cursor on hover */
-      transition: transform 0.3s ease; /* Add smooth transition effect */
-    }
-
-    a:hover {
-      text-decoration: none; /* Remove underline on hover */
+      box-sizing: border-box;
+      display: block;
+      text-decoration: none;
+      color: inherit;
       cursor: pointer;
-      transform: scale(
-        1.2
-      ); /* Scale the anchor tag to 1.2 times its original size */
-
-      /* Optionally, add other styles for hover state */
     }
   `;
 
@@ -70,24 +68,26 @@ export class RepoCard extends LitElement {
       );
 
       return html`
-        <a href=${"/repo-details/" + this.repo.owner.id}>
-          <div>
-            <div class="RepoCardHeader">
-              <div>Name: ${this.repo.name}</div>
-              ${this.repo.owner && this.repo.owner.avatar_url
-                ? html`<img src=${this.repo.owner.avatar_url} />`
-                : nothing}
-            </div>
-            <div class="RepoCardBody">
-              <div>
-                description: ${this.repo.desription || "no description found"}
+        <div class="wrapper">
+          <a href=${"/repo-details/" + this.repo.owner.id}>
+            <div>
+              <div class="RepoCardHeader">
+                <div>Name: ${this.repo.name}</div>
+                ${this.repo.owner && this.repo.owner.avatar_url
+                  ? html`<img src=${this.repo.owner.avatar_url} />`
+                  : nothing}
               </div>
-              <div>repo score: ${calculateRepoScore(this.repo)}</div>
-              <div>language: ${this.repo.language}</div>
-              <div>last updated: ${formattedDate}</div>
+              <div class="RepoCardBody">
+                <div>
+                  description: ${this.repo.desription || "no description found"}
+                </div>
+                <div>repo score: ${calculateRepoScore(this.repo)}</div>
+                <div>language: ${this.repo.language}</div>
+                <div>last updated: ${formattedDate}</div>
+              </div>
             </div>
-          </div>
-        </a>
+          </a>
+        </div>
       `;
     } else {
       return nothing;

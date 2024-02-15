@@ -32,7 +32,7 @@ export class SearchResults extends LitElement {
       <div class="RepoList">
         ${this.repos
           ? this.repos.map(
-              (repo) => html` <repo-card .repo=${repo}></repo-card> `,
+              (repo) => html`<repo-card .repo=${repo}></repo-card>`,
             )
           : "there are no results. try another search."}
       </div>

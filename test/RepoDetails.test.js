@@ -12,7 +12,6 @@ describe("repo-details", () => {
 
     let repoDetailsDiv;
     elements.forEach((div) => {
-      console.log(div.innerHTML);
       if (div.innerHTML.includes("<div>Repo Details</div>")) {
         repoDetailsDiv = div;
         return;
